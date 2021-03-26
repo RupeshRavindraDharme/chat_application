@@ -8,6 +8,8 @@ const socketio = require("socket.io");
 const mongodb =
   "mongodb+srv://rupesh:India1234@cluster0.lmlpy.mongodb.net/chat-database?retryWrites=true&w=majority";
 const mongoose = require("mongoose");
+const cookieParser = require("cookie-parser");
+app.use(cookieParser());
 const { addUser, getUser, removeUser } = require("./helper");
 const io = socketio(http);
 const PORT = process.env.PORT || 5000;
@@ -17,6 +19,19 @@ mongoose
   .catch((err) => console.log(err));
 const Room = require("./models/Room");
 const Message = require("./models/Message");
+const { get } = require("./routes/authRoutes");
+
+app.get("/set-cookies", (req, res) => {
+  res.cookie("username", "Tony");
+  res.cookie("isAuthenticated", true, { maxAge: 24 * 60 * 60 * 1000 });
+  res.send("cookies are set");
+});
+
+app.get("/get-cookies", (req, res) => {
+  const cookies = req.cookies;
+  console.log(cookies);
+  res.json(cookies);
+});
 
 io.on("connection", (socket) => {
   console.log(socket.id);
