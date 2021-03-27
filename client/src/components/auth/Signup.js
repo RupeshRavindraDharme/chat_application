@@ -9,6 +9,9 @@ const Signup = () => {
   const [passwordError, setPasswordError] = useState("");
   const submitHandler = async (e) => {
     e.preventDefault();
+    setEmailError("");
+    setNameError("");
+    setPasswordError("");
     console.log(name, email, password);
     try {
       const res = await fetch("http://localhost:5000/signup", {
@@ -19,6 +22,11 @@ const Signup = () => {
       });
       const data = await res.json();
       console.log(data);
+      if (data.errors) {
+        setEmailError(data.errors.email);
+        setNameError(data.errors.name);
+        setPasswordError(data.errors.password);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -36,7 +44,7 @@ const Signup = () => {
               value={name}
               onChange={(e) => setName(e.target.value)}
             />
-            <div className="name error red-text"></div>
+            <div className="name error red-text">{nameError}</div>
             <label htmlFor="name">Name</label>
           </div>
         </div>
@@ -50,7 +58,7 @@ const Signup = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
-            <div className="email error red-text"></div>
+            <div className="email error red-text">{emailError}</div>
             <label htmlFor="email">Email</label>
           </div>
         </div>
@@ -64,7 +72,7 @@ const Signup = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
-            <div className="password error red-text"></div>
+            <div className="password error red-text">{passwordError}</div>
             <label htmlFor="password">Password</label>
           </div>
         </div>
