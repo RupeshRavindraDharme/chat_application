@@ -1,6 +1,13 @@
 const express = require("express");
 const app = express();
+const cors = require("cors");
 const authRoutes = require("./routes/authRoutes");
+const corsOptions = {
+  origin: "http://localhost:3000",
+  crediential: true,
+  optionsSuccessStatus: 200, // For legacy browser support
+};
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(authRoutes);
 const http = require("http").Server(app);
