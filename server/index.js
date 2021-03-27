@@ -4,7 +4,7 @@ const cors = require("cors");
 const authRoutes = require("./routes/authRoutes");
 const corsOptions = {
   origin: "http://localhost:3000",
-  crediential: true,
+  credentials: true,
   optionsSuccessStatus: 200, // For legacy browser support
 };
 app.use(cors(corsOptions));
