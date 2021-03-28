@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 const cors = require("cors");
+const cookieParser = require("cookie-parser");
 const authRoutes = require("./routes/authRoutes");
 const corsOptions = {
   origin: "http://localhost:3000",
@@ -9,14 +10,13 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 app.use(express.json());
+app.use(cookieParser());
 app.use(authRoutes);
 const http = require("http").Server(app);
 const socketio = require("socket.io");
 const mongodb =
   "mongodb+srv://rupesh:India1234@cluster0.lmlpy.mongodb.net/chat-database?retryWrites=true&w=majority";
 const mongoose = require("mongoose");
-const cookieParser = require("cookie-parser");
-app.use(cookieParser());
 const { addUser, getUser, removeUser } = require("./helper");
 const io = socketio(http);
 const PORT = process.env.PORT || 5000;

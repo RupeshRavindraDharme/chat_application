@@ -1,6 +1,6 @@
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
-const { create } = require("../models/User");
+const { create, findById } = require("../models/User");
 const maxAge = 5 * 24 * 60 * 60;
 const createJWT = (id) => {
   return jwt.sign({ id }, "chatroom secret", {
@@ -48,6 +48,23 @@ module.exports.login = async (req, res) => {
   } catch (error) {
     let errors = alertError(error);
     res.status(400).json({ errors });
+  }
+};
+module.exports.verifyuser = (req, res, next) => {
+  const token = req.cookies.jwt;
+  if (token) {
+    jwt.verify(token, "chatroom secret", async (err, decodedToken) => {
+      console.log(decodedToken);
+      if (err) {
+        console.log(err);
+      } else {
+        var user = await User.findById(decodedToken.id);
+        res.json(user);
+        next();
+      }
+    });
+  } else {
+    next();
   }
 };
 module.exports.logout = (req, res) => {
