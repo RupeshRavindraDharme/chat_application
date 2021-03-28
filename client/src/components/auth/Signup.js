@@ -1,6 +1,8 @@
-import React, { useState } from "react";
-
+import React, { useState, useContext } from "react";
+import { UserContext } from "../../UserContext";
+import { Redirect } from "react-router-dom";
 const Signup = () => {
+  const { user, setUser } = useContext(UserContext);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -27,10 +29,16 @@ const Signup = () => {
         setNameError(data.errors.name);
         setPasswordError(data.errors.password);
       }
+      if (data.user) {
+        setUser(data.user);
+      }
     } catch (error) {
       console.log(error);
     }
   };
+  if (user) {
+    return <Redirect to="/" />;
+  }
   return (
     <div className="row">
       <form className="col s12" onSubmit={submitHandler}>
